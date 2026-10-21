@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stratégie immobilière – Tableau de bord du parc</title>
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="src/css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>
+      <span class="logo-box"><img src="assets/logo.png" alt="République et canton de Genève" onerror="this.parentElement.style.display='none'"></span>
+      <span>Stratégie immobilière <small>Parc de l'État – biens séparables</small></span>
+    </h1>
+    <div class="topbar-actions">
+      <select id="snapshot-select" title="Version des données"></select>
+      <label class="btn primary">Importer un fichier Excel<input id="file-input" type="file" accept=".xlsx,.xlsm,.xls" hidden></label>
+      <span class="version" id="app-version"></span>
+    </div>
+  </header>
+
+  <section id="welcome" class="welcome">
+    <div class="drop" id="drop">
+      <h2>Importez le fichier « Analyse portefeuille »</h2>
+      <p>Glissez-déposez le fichier Excel (source Archibus) ou utilisez le bouton en haut à droite.<br>
+      Les données restent dans votre navigateur : rien n'est envoyé sur un serveur.</p>
+    </div>
+  </section>
+
+  <main id="app" hidden>
+    <aside class="filters" id="filters">
+      <div class="filters-head"><h2>Filtres</h2><button class="btn small" id="reset-filters">Réinitialiser</button></div>
+      <input id="f-texte" type="search" placeholder="Recherche (site, adresse, service…)">
+      <div id="facets"></div>
+      <label class="check"><input type="checkbox" id="f-exc"> Exclure les biens d'exception</label>
+      <label class="check"><input type="checkbox" id="f-pat"> Exclure les valeurs patrimoniales</label>
+      <label>Valeur min. (CHF)<input type="number" id="f-valeur" min="0" step="100000"></label>
+      <label>Surface réelle min. (m²)<input type="number" id="f-surface" min="0" step="100"></label>
+    </aside>
+
+    <div class="content">
+      <nav class="tabs">
+        <button data-tab="chiffres" class="active">Chiffres &amp; graphiques</button>
+        <button data-tab="carte">Carte</button>
+        <button data-tab="tableau">Tableau</button>
+        <button data-tab="historique">Historique</button>
+        <button data-tab="regles">Règles</button>
+      </nav>
+
+      <section id="tab-chiffres" class="tab active">
+        <div class="kpis" id="kpis"></div>
+        <div class="grid">
+          <div class="card"><h3>Sites par statut</h3><canvas id="chart-statut"></canvas></div>
+          <div class="card"><h3>Valeur par statut</h3><canvas id="chart-valeur-statut"></canvas></div>
+          <div class="card wide"><h3>Surface réelle par département et statut</h3><canvas id="chart-dept"></canvas></div>
+          <div class="card wide"><h3>15 plus gros sites cessibles / cession envisagée (valeur)</h3><canvas id="chart-top"></canvas></div>
+          <div class="card"><h3>Type d'occupant</h3><canvas id="chart-type"></canvas></div>
+          <div class="card"><h3>Valeur par secteur de gérance</h3><canvas id="chart-gerance"></canvas></div>
+        </div>
+      </section>
+
+      <section id="tab-carte" class="tab">
+        <div class="map-bar">
+          <button class="btn" id="geocode-btn">Localiser les sites</button>
+          <span id="geocode-status"></span>
+          <span class="legend" id="legend"></span>
+        </div>
+        <div id="map"></div>
+      </section>
+
+      <section id="tab-tableau" class="tab">
+        <div class="table-bar"><span id="table-count"></span><button class="btn" id="export-csv">Exporter en CSV</button></div>
+        <div class="table-wrap"><table id="table"></table></div>
+        <div id="detail" class="detail" hidden></div>
+      </section>
+
+      <section id="tab-historique" class="tab">
+        <div class="card">
+          <h3>Versions importées</h3>
+          <table id="snap-table"></table>
+          <p class="hint">Chaque import crée une version (dédoublonnée par empreinte du fichier). Les versions sont conservées dans ce navigateur ; exportez-les en JSON pour les archiver dans <code>data/snapshots/</code>.</p>
+        </div>
+        <div class="card">
+          <h3>Comparer deux versions</h3>
+          <div class="row">
+            <select id="cmp-old"></select> → <select id="cmp-new"></select>
+            <button class="btn" id="cmp-btn">Comparer</button>
+          </div>
+          <div id="cmp-result"></div>
+        </div>
+      </section>
+
+      <section id="tab-regles" class="tab">
+        <div class="card" id="rules"></div>
+      </section>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="vendor/chart.umd.min.js"></script>
+  <script src="vendor/xlsx.full.min.js"></script>
+  <!-- Scripts classiques (pas de modules ES) : l'application fonctionne aussi en ouvrant index.html directement. L'ordre compte. -->
+  <script src="src/js/config.js"></script>
+  <script src="src/js/format.js"></script>
+  <script src="src/js/parser.js"></script>
+  <script src="src/js/model.js"></script>
+  <script src="src/js/filters.js"></script>
+  <script src="src/js/diff.js"></script>
+  <script src="src/js/store.js"></script>
+  <script src="src/js/geocode.js"></script>
+  <script src="src/js/map.js"></script>
+  <script src="src/js/charts.js"></script>
+  <script src="src/js/main.js"></script>
+</body>
+</html>

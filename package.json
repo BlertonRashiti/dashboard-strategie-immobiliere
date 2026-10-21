@@ -1,0 +1,11 @@
+{
+  "name": "strategie-immobiliere-dashboard",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Tableau de bord du parc immobilier de l'État : identification des biens séparables.",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "test": "node --test tests/"
+  }
+}
